@@ -1,4 +1,4 @@
-# to_do_task_2
+# To Do Task
 
 ## Project setup
 ```
