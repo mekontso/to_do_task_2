@@ -7,6 +7,11 @@
       :single-expand="true"
       :expanded.sync="expanded"
       show-expand>
+    <template v-slot:top>
+      <v-toolbar color="white" flat>
+        <h1 class='text-h3 ma-5 title'>My Todo's</h1>
+      </v-toolbar>
+    </template>
     <template v-slot:item.status="{ item }">
       <v-chip
           :color="getStatusColor(item.status)"
@@ -111,5 +116,7 @@ export default {
 </script>
 
 <style scoped>
-
+.title {
+  color: #1976D2;
+}
 </style>

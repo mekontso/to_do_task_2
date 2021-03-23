@@ -7,14 +7,14 @@
           color="primary"
           dark
           class="mb-2"
-          @click='openDialog'
+          @click='openAddDialog'
       >
         <v-icon>add</v-icon>
-        Add
+        Add Todo
       </v-btn>
     </v-card-title>
     <v-card-text>
-      <v-dialog persistent max-width="800" :value='dialog'>
+      <v-dialog persistent max-width="800" v-model='addDialog'>
         <v-card>
           <v-card-text class='headline '>{{ formTitle }}</v-card-text>
           <v-divider></v-divider>
@@ -24,7 +24,7 @@
                 <v-row>
                   <v-col cols='12' sm='6' md='6'>
                     <v-text-field
-                        :value='getTodoId'
+                        :value='editedItem.id'
                         prepend-icon="mdi-key-change"
                         label="Auto Generated Id"
                         disabled
@@ -35,14 +35,14 @@
                         prepend-icon="mdi-information-variant"
                         label="Title"
                         :rules='titleRules'
-                        v-model='title'
+                        v-model='editedItem.title'
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols='12' sm='6' md='6'>
                     <v-textarea
-                        v-model='description'
+                        v-model='editedItem.description'
                         :rules='descriptionRules'
                         class="mx-2"
                         label="Description "
@@ -62,7 +62,7 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model='due_date'
+                            v-model='editedItem.due_date'
                             :rules='dueDateRules'
                             v-bind="attrs"
                             v-on="on"
@@ -72,7 +72,7 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
-                          v-model='due_date'
+                          v-model='editedItem.due_date'
                           @input="menu = false"></v-date-picker>
                     </v-menu>
                   </v-col>
@@ -83,7 +83,7 @@
                          md="6">
                     <v-select
                         prepend-icon="mdi-shop"
-                        v-model="priority"
+                        v-model="editedItem.priority"
                         label="Priority"
                         :rules="priorityRules"
                         :items="priorities"
@@ -94,7 +94,7 @@
                          md="6">
                     <v-select
                         prepend-icon="mdi-shop"
-                        v-model="status"
+                        v-model="editedItem.status"
                         label="Status"
                         :rules="statusRules"
                         :items="statusSelect"
@@ -118,7 +118,7 @@
             <v-btn
                 color="error darken-1"
                 text
-                @click="close"
+                @click="closeAddDialog"
             >
               Close
             </v-btn>
@@ -127,7 +127,7 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog :value="getDeleteDialog" max-width="500px">
+      <v-dialog v-model="deleteDialog" max-width="500px">
         <v-card>
           <v-card-title class="headline ">
             Are you sure you want to delete this item?
@@ -135,7 +135,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="error darken-1" text @click="deleteTodo">Yes</v-btn>
-            <v-btn color="blue darken-1" text @click="closeDeleteDialog">No</v-btn>
+            <v-btn color="blue darken-1" text >No</v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
         </v-card>
@@ -150,65 +150,37 @@ import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: "ToDoListAdd",
   computed: {
-    ...mapGetters([
-      'formTitle',
-      'getDialog',
-      'getDeleteDialog',
-      'getTodoId',
-      'getTodoTitle',
-      'getTodoDescription',
-      'getTodoDueDate',
-      'getTodoPriority',
-      'getTodoStatus'
-    ]),
-    dialog() {
-      return this.getDialog
+    /**
+     * Function update the form title
+     * @returns {string}
+     */
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Todo' : 'Edit Todo'
     },
-    title: {
-      get() {
-        return this.getTodoTitle
-      },
-      set(value){
-        this.setTodoTitle(value)
-      }
-    },
-    description: {
-      get() {
-        return this.getTodoDescription
-      },
-      set(value){
-        this.setTodoDescription(value)
-      }
-    },
-    due_date: {
-      get() {
-        return this.getTodoDueDate
-      },
-      set(value){
-        this.setTodoDueDate(value)
-      }
-    },
-    priority: {
-      get() {
-        return this.getTodoPriority
-      },
-      set(value){
-        this.setTodoPriority(value)
-      }
-    },
-    status: {
-      get() {
-        return this.getTodoStatus
-      },
-      set(value){
-        this.setTodoStatus(value)
-      }
-    }
+
   },
   data: () => ({
     validForm: false,
     editedIndex: -1,
+    editedItem: {
+      id: "",
+      title: "",
+      description: "",
+      due_date: "",
+      priority: "",
+      status: ""
+    },
+    defaultItem: {
+      id: "",
+      title: "",
+      description: "",
+      due_date: "",
+      priority: "",
+      status: ""
+    },
     menu: false,
+    addDialog: false,
+    deleteDialog: false,
     titleRules: [
       v => !!v || 'Title is required',
     ],
@@ -237,17 +209,7 @@ export default {
 
   }),
   methods: {
-    ...mapMutations([
-      'closeDialog',
-      'openDialog',
-      'closeDeleteDialog',
-      'setEditedIndex',
-      'setTodoTitle',
-      'setTodoDescription',
-      'setTodoDueDate',
-      'setTodoPriority',
-      'setTodoStatus',
-    ]),
+
     save() {
       if (this.$refs.form.validate()) {
         this.$store.commit("alertSuccess", "Success storing todo")
@@ -266,6 +228,16 @@ export default {
     deleteTodo(){
       this.closeDeleteDialog()
       this.$store.commit("alertSuccess", "Success deleting todo")
+    },
+
+
+    openAddDialog(){
+      this.addDialog = true
+    },
+    closeAddDialog(){
+      this.addDialog = false
+      this.editedItem = Object.assign({},this.defaultItem)
+      this.editedIndex = -1
     }
   },
 

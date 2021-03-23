@@ -1,5 +1,4 @@
 <template>
-
       <v-app-bar app clipped-left class="grey lighten-3 rounded-lg mb-8">
         <v-img
             alt="Vuetify Logo"
@@ -16,8 +15,7 @@
         <v-btn
             class="hidden-xs-only"
             text>
-          {{this.$store.getters.getUserData.name}}-
-          {{this.$store.getters.getUserData.role_name}}
+          Mekontso Anderson - ADMIN
         </v-btn>
         <v-btn icon>
           <v-icon>mdi-bell</v-icon>
@@ -30,10 +28,6 @@
           <v-icon>exit_to_app</v-icon>
         </v-btn>
       </v-app-bar>
-
-
-
-
 </template>
 
 <script>

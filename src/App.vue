@@ -2,7 +2,7 @@
   <v-app>
     <TheHeader/>
     <v-main>
-      <CustomSnackbar/>
+
       <v-container>
         <TodoList/>
       </v-container>
@@ -15,7 +15,7 @@
 import TheHeader from "@/components/TheHeader";
 import TheFooter from "@/components/TheFooter";
 import TodoList from "@/components/TodoList";
-import CustomSnackbar from "@/components/CustomSnackbar";
+
 
 export default {
   name: 'App',
@@ -23,7 +23,6 @@ export default {
     title: "Todos"
   },
   components: {
-    CustomSnackbar,
     TodoList,
     TheFooter,
     TheHeader,
