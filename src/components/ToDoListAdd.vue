@@ -247,13 +247,13 @@ export default {
       'setTodoDueDate',
       'setTodoPriority',
       'setTodoStatus',
-      'deleteTodo'
     ]),
     save() {
       if (this.$refs.form.validate()) {
-        t
+        this.$store.commit("alertSuccess", "Success storing todo")
+        this.closeDialog()
       } else {
-        console.log("invalid form")
+
         this.$store.commit("alertWarning", "Please enter all todo information\'s")
       }
     },
@@ -262,6 +262,10 @@ export default {
       this.setEditedIndex(-1)
       this.$refs.form.reset()
       this.$refs.form.resetValidation()
+    },
+    deleteTodo(){
+      this.closeDeleteDialog()
+      this.$store.commit("alertSuccess", "Success deleting todo")
     }
   },
 
