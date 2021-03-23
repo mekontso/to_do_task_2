@@ -1,5 +1,13 @@
 # To Do Task
-
+## Code explanation
+## Tools
+```
+The tools used for this project are 
+```
+```
+Open the about.txt file for code descriptions.
+asd
+```
 ## Project setup
 ```
 yarn install
@@ -16,4 +24,4 @@ yarn build
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
