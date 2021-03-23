@@ -20,7 +20,9 @@ import CustomSnackbar from "@/components/CustomSnackbar";
 
 export default {
   name: 'App',
-
+  metaInfo:{
+    title: "Todos"
+  },
   components: {
     CustomSnackbar,
     TodoList,

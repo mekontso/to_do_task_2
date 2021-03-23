@@ -126,6 +126,20 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog :value="getDeleteDialog" max-width="500px">
+        <v-card>
+          <v-card-title class="headline ">
+            Are you sure you want to delete this item?
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error darken-1" text @click="deleteTodo">Yes</v-btn>
+            <v-btn color="blue darken-1" text @click="closeDeleteDialog">No</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card-text>
   </v-card>
 </template>
@@ -139,6 +153,7 @@ export default {
     ...mapGetters([
       'formTitle',
       'getDialog',
+      'getDeleteDialog',
       'getTodoId',
       'getTodoTitle',
       'getTodoDescription',
@@ -225,12 +240,14 @@ export default {
     ...mapMutations([
       'closeDialog',
       'openDialog',
+      'closeDeleteDialog',
       'setEditedIndex',
       'setTodoTitle',
       'setTodoDescription',
       'setTodoDueDate',
       'setTodoPriority',
-      'setTodoStatus'
+      'setTodoStatus',
+      'deleteTodo'
     ]),
     save() {
       if (this.$refs.form.validate()) {

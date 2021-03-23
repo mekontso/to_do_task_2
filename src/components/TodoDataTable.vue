@@ -30,7 +30,6 @@
         </p>
       </td>
 
-
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon
@@ -44,15 +43,16 @@
       <v-icon
           color="error"
           small
+          @click='deleteItem(item)'
       >
         mdi-delete
       </v-icon>
-
     </template>
   </v-data-table>
 </template>
 
 <script>
+
 export default {
   name: "TodoDataTable",
   props: {
@@ -69,12 +69,16 @@ export default {
       type: String
     },
   },
+
   data: () => ({
     expanded:[]
   }),
   methods: {
     editItem(item){
       this.$store.dispatch('editTodo',item)
+    },
+    deleteItem(item){
+      this.$store.dispatch('deleteTodoAction',item)
     },
     getStatusColor(status) {
       switch (status) {
