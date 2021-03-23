@@ -35,12 +35,14 @@
                         prepend-icon="mdi-information-variant"
                         label="Title"
                         :rules='titleRules'
+                        v-model='title'
                     ></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols='12' sm='6' md='6'>
                     <v-textarea
+                        v-model='description'
                         :rules='descriptionRules'
                         class="mx-2"
                         label="Description "
@@ -60,6 +62,7 @@
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
+                            v-model='due_date'
                             :rules='dueDateRules'
                             v-bind="attrs"
                             v-on="on"
@@ -69,8 +72,34 @@
                         ></v-text-field>
                       </template>
                       <v-date-picker
+                          v-model='due_date'
                           @input="menu = false"></v-date-picker>
                     </v-menu>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12"
+                         sm="6"
+                         md="6">
+                    <v-select
+                        prepend-icon="mdi-shop"
+                        v-model="priority"
+                        label="Priority"
+                        :rules="priorityRules"
+                        :items="priorities"
+                    ></v-select>
+
+                  </v-col><v-col cols="12"
+                         sm="6"
+                         md="6">
+                    <v-select
+                        prepend-icon="mdi-shop"
+                        v-model="status"
+                        label="Status"
+                        :rules="statusRules"
+                        :items="statusSelect"
+                    ></v-select>
+
                   </v-col>
                 </v-row>
               </v-container>
@@ -110,13 +139,55 @@ export default {
     ...mapGetters([
       'formTitle',
       'getDialog',
-      'getTodoId'
+      'getTodoId',
+      'getTodoTitle',
+      'getTodoDescription',
+      'getTodoDueDate',
+      'getTodoPriority',
+      'getTodoStatus'
     ]),
     dialog() {
       return this.getDialog
     },
-    id() {
-
+    title: {
+      get() {
+        return this.getTodoTitle
+      },
+      set(value){
+        this.setTodoTitle(value)
+      }
+    },
+    description: {
+      get() {
+        return this.getTodoDescription
+      },
+      set(value){
+        this.setTodoDescription(value)
+      }
+    },
+    due_date: {
+      get() {
+        return this.getTodoDueDate
+      },
+      set(value){
+        this.setTodoDueDate(value)
+      }
+    },
+    priority: {
+      get() {
+        return this.getTodoPriority
+      },
+      set(value){
+        this.setTodoPriority(value)
+      }
+    },
+    status: {
+      get() {
+        return this.getTodoStatus
+      },
+      set(value){
+        this.setTodoStatus(value)
+      }
     }
   },
   data: () => ({
@@ -138,13 +209,28 @@ export default {
     statusRules: [
       v => !!v || 'Status is required',
     ],
+    priorities:[
+        'Low',
+        'Medium',
+        'High'
+    ],
+    statusSelect:[
+      'Ongoing',
+      'Pending',
+      'Terminated'
+    ]
 
   }),
   methods: {
     ...mapMutations([
       'closeDialog',
       'openDialog',
-      'setEditedIndex'
+      'setEditedIndex',
+      'setTodoTitle',
+      'setTodoDescription',
+      'setTodoDueDate',
+      'setTodoPriority',
+      'setTodoStatus'
     ]),
     save() {
       if (this.$refs.form.validate()) {
