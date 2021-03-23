@@ -1,13 +1,9 @@
 # To Do Task
 ## Code explanation
-## Tools
 ```
-The tools used for this project are 
+Information's in the code details.pdf file
 ```
-```
-Open the about.txt file for code descriptions.
-asd
-```
+
 ## Project setup
 ```
 yarn install

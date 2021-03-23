@@ -1,6 +1,5 @@
 <template>
-  <v-app >
-<!--    <TheHeader/>-->
+  <v-app>
     <TheHeader/>
     <v-main>
       <CustomSnackbar/>
@@ -26,7 +25,6 @@ export default {
   components: {
     CustomSnackbar,
     TodoList,
-
     TheFooter,
     TheHeader,
 
